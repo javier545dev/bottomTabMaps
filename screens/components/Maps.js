@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, Dimensions } from "react-native"
-import MapView, { PROVIDER_GOOGLE} from "react-native-maps"
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps"
 
-export default ({ onLongPress }) => {
+export default ({ onLongPress, point }) => {
 
   const darkMap = [
     {
@@ -214,8 +214,12 @@ export default ({ onLongPress }) => {
           longitudeDelta: 0.0421,
         }}
       >
-      </MapView>    )
-}
+        {point.map(x =>
+          <Marker key={x.name} coordinate={x.coordinate} title={x.name}
+          />)}
+      </MapView>    
+    )
+  }
 
 const styles = StyleSheet.create({
     mapas: {
