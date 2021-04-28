@@ -1,16 +1,16 @@
 import React from 'react'
-import { StyleSheet, Dimensions, Modal, View, Text } from "react-native"
+import { StyleSheet, Modal, View} from "react-native"
 
-export default () => {
+export default ({ children, visibility }) => {
     return (
         <Modal
             animationType="slide"
             transparent={true}
-            visible={false}
+            visible={visibility}
          >
             <View style={styles.centrado}>
                 <View style={styles.modal1}>
-                    <Text>:D happy</Text>
+                    {children}
                 </View>
             </View>
         </Modal>

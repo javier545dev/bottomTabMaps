@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, StatusBar, TouchableOpacity, Pressable} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -36,6 +36,9 @@ const CustomTabBarButton = ({children, onPress}) => (
 )
 
 const App = () => {
+
+  const [stateX, setStateX] = React.useState([])
+  
   return (
     <>
       <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
@@ -81,40 +84,48 @@ const App = () => {
           />
           <Tab.Screen
             name="State"
-            component={Screen3}
-            options={{
-              tabBarIcon: ({focused}) => (
-                <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                  <Icon
-                    name='book'
-                    size={30}
-                    style={{
-                      width: 30,
-                      height: 30,
-                      color: focused ? '#e32' : '#fff'
-                    }}  />
-                  <Text style={{color: focused ? '#e32' : '#fff', fontSize:12}}>State</Text>
-                </View>
-              )
+            component={Mapa}
+            options={({navigation})=> {
+              return {
+                tabBarButton:(props) => <Pressable {...props} onPress={()=>
+                  navigation.navigate('State',{name:'state'})
+                }/>,
+                tabBarIcon: ({focused}) => (
+                  <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                    <Icon
+                      name='book'
+                      size={30}
+                      style={{
+                        width: 30,
+                        height: 30,
+                        color: focused ? '#e32' : '#fff'
+                      }}  />
+                    <Text style={{color: focused ? '#e32' : '#fff', fontSize:12}}>State</Text>
+                  </View>
+                )
+              }
             }}
           />
           <Tab.Screen name="Post" component={Mapa}
-            options={{
-              tabBarIcon: ({focused}) => (
-                <Icon
-                  name='search'
-                  size={32}
-                  style={{
-                    width: 35,
-                    height: 35,
-                    color: focused ? '#FFF' : '#e32' 
-                  }}
-                />
-              ),
-              tabBarButton: (props) => (
-                <CustomTabBarButton {...props} />
-              )
-            }}
+            options={({navigation}) => ({
+                tabBarIcon: ({focused}) => (
+                  <Icon
+                    name='search'
+                    size={32}
+                    style={{
+                      width: 35,
+                      height: 35,
+                      color: focused ? '#FFF' : '#e32' 
+                    }}
+                  />
+                ),
+                tabBarButton: (props) => (
+                  <CustomTabBarButton {...props} onPress={()=>
+                    navigation.navigate('Post',{name:'post'})
+                  }/>
+                )
+              }
+            )}
           />
           <Tab.Screen
             name="Alerts"
