@@ -1,40 +1,71 @@
-import React from 'react';
-import { useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, StatusBar, Button } from 'react-native'
-import { Modal, Mapas } from './components'
+import React, { useState } from 'react'
 
-const Mapa = () => {
+import { StyleSheet, Text, View, StatusBar, Button } from 'react-native'
+import { Modal, Mapas, Entradas } from './components'
+import { useAsyncStorage } from '@react-native-async-storage/async-storage'
 
+const Mapa = ({ route }) => {
   const [point, setPoint] = useState([])
+  const [pointTemp, setPointTemp] = useState({})
+  const [name, setName] = useState('')
+  const [visibility, setVisibility] = useState(false)
+  const [visibilityFilter, setVisibilityFilter] = useState('new_point') // new_point or all_point
+  const { getItem: mark, setItem: setMark } = useAsyncStorage('@points')
+
+  React.useEffect(() => {
+    const getItem = async () => {
+      const item = await mark()
+      setPoint(JSON.parse(item))
+    }
+    getItem()
+  }, [route.params])
+
+  // const {name = 'post'} = route.params (asignando valor a un objeto indefinido
   const handleLongPress = ({ nativeEvent }) => {
-    const newPoint = point.concat({ coordinate : nativeEvent.coordinate })
-      setPoint(newPoint)
+    setVisibilityFilter('new_point')
+    setPointTemp(nativeEvent.coordinate)
+    setVisibility(true)
   }
-  console.log(point)
 
+  const handleChangeText = (text) => {
+    setName(text)
+  }
 
-  function HomeScreen() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Home!</Text>
-      </View>
-    );
+  const handleSubmit = async () => {
+    const newPoint = { coordinate: pointTemp, name: name }
+    let allMarkers = await mark()
+    allMarkers = JSON.parse(allMarkers) || []
+    const _point = [...allMarkers, newPoint]
+    setPoint(_point)
+    setVisibility(false)
+    setName('')
+    await setMark(JSON.stringify(_point))
+    // setStateX(point.concat(newPoint))
   }
-  
-  function SettingsScreen() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Settings!</Text>
-      </View>
-    );
-  }
+
+  // const handleList = () => {
+  // setVisibilityFilter('all_point');
+  // setVisibility(true);
+  // };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
-      <Mapas onLongPress={handleLongPress} />
-      <Modal />
-
+      <Mapas onLongPress={handleLongPress} point={point} />
+      <Modal visibility={visibility}>
+        {visibilityFilter === 'new_point' ? (
+          <>
+            <Entradas
+              title="Name"
+              placeholder="Name of Search"
+              onChangeText={handleChangeText}
+            />
+            <Button title="Aceptar" onPress={handleSubmit} />
+          </>
+        ) : (
+          <Text>lalala</Text>
+        )}
+      </Modal>
     </View>
   )
 }
@@ -45,21 +76,21 @@ const styles = StyleSheet.create({
     shadowColor: '#7F5DF0',
     shadowOffset: {
       width: 0,
-      height: 10,
+      height: 10
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.5,
     elevation: 5
   },
-  centrado:{
+  centrado: {
     flex: 1,
     justifyContent: 'flex-start',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center'
-  },
-});
+  }
+})
