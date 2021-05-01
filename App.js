@@ -55,8 +55,8 @@ const App = () => {
             style: {
               position: 'absolute',
               bottom: 35,
-              left: 20,
-              right: 20,
+              left: 50,
+              right: 50,
               elevation: 0,
               backgroundColor: 'rgba(255, 255, 255, 0.15)',
               height: 80,

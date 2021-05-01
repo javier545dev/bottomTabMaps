@@ -1,7 +1,7 @@
 module.exports = {
   singleQuote: true,
   semi: false,
-  endOfLine: 'lf',
+  endOfLine: 'crlf', //'lf'
   arrowParens: 'always',
   printWidth: 80,
   trailingComma: 'none',
