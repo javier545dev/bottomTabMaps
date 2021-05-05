@@ -28,9 +28,9 @@ const CustomTabBarButton = ({ children, onPress }) => (
   >
     <View
       style={{
-        top: 10,
+        top: 15,
         width: 75,
-        height: 75,
+        height: 70,
         borderRadius: 25,
         backgroundColor: '#e32'
       }}
@@ -54,13 +54,13 @@ const App = () => {
             inactiveTintColor: 'black',
             style: {
               position: 'absolute',
-              bottom: 35,
-              left: 50,
-              right: 50,
+              bottom: 25,
+              left: 80,
+              right: 80,
               elevation: 0,
               backgroundColor: 'rgba(255, 255, 255, 0.15)',
-              height: 80,
-              borderRadius: 25,
+              height: 65,
+              borderRadius: 20,
               ...styles.shadow
             }
           }}
